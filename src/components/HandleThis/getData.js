@@ -39,8 +39,7 @@ const getdata = (callback) => {
     }, 2000);
 }
 
-getdata((result) => {
-    console.log(result); // This will log "Hello" after 2 seconds
+getdata((result) => {console.log(result); // This will log "Hello" after 2 seconds
 });
 
 // not recomanded below one
