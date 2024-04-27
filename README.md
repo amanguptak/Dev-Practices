@@ -53,7 +53,7 @@ function MyComponent({ someProp }) {
 
 This pattern is particularly useful for functions that need to interact with props or state and helps in managing performance in complex components.
 
-#The useCallback hook in React is used to memoize functions. This means that it allows you to preserve the same function instance across different renders, preventing unnecessary re-creations of the function unless specific values it depends on change. This is particularly useful when passing functions down to child components or when a function is used in dependencies of other React hooks like useEffect. Here’s how it benefits your React application:
+##The useCallback hook in React is used to memoize functions. This means that it allows you to preserve the same function instance across different renders, preventing unnecessary re-creations of the function unless specific values it depends on change. This is particularly useful when passing functions down to child components or when a function is used in dependencies of other React hooks like useEffect. Here’s how it benefits your React application:
 
 1. Performance Optimization:
 When a function is defined inside a component, it gets recreated on every render. If this function is passed as a prop to child components, those child components might also re-render every time the parent component renders, even if the actual logic of the function hasn't changed. This can lead to performance issues in complex applications. By memoizing the function with useCallback, you ensure that the child components that depend on this function as a prop do not re-render unless the function's dependencies have changed.
