@@ -63,3 +63,51 @@ In React, components often re-render when their state or props change. If a func
 
 3. Dependencies in Other Hooks:
 useCallback is particularly useful when the function is used in the dependency array of other hooks like useEffect, useMemo, or another useCallback. This ensures that effects and other memoized calculations only execute when the actual logic of the function changes, rather than executing on every render
+
+
+## In React, state variables are used instead of normal variables when you need the UI to react to data changes. State variables are special because they come with built-in capabilities to tell React components to re-render whenever their values change. This makes state variables essential for dynamic and interactive UI development.
+
+### Why Not Use Normal Variables?
+
+Normal variables don’t have the reactivity that state variables offer. If you use a normal variable to store data in a React component, changes to that variable won't cause the component to re-render. This means the UI won't update to reflect the new values, which is not ideal for interactive applications where the UI needs to stay up-to-date with the underlying data.
+
+### Example: Counter Component
+
+Consider a simple counter application:
+
+**Using Normal Variable:**
+```jsx
+function Counter() {
+  let count = 0;
+
+  function handleClick() {
+    count += 1;
+    console.log(count); // This will log the updated count value.
+  }
+
+  return (
+    <button onClick={handleClick}>Count: {count}</button>
+  );
+}
+```
+In this example, even though the `count` variable is being updated when you click the button, the UI does not update because normal variables don't trigger re-renders.
+
+**Using State Variable:**
+```jsx
+import { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  function handleClick() {
+    setCount(count + 1);
+  }
+
+  return (
+    <button onClick={handleClick}>Count: {count}</button>
+  );
+}
+```
+Here, `count` is a state variable. When `setCount` is called, it updates the state and also tells React to re-render the component, thus updating the UI with the new count value.
+
+Using state variables allows React components to dynamically respond to interactions and data changes, providing a much more interactive user experience.
