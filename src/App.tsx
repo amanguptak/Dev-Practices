@@ -1,17 +1,19 @@
 
 
+import { useState } from 'react';
 import './App.css'
-// import GridConcept from './components/GridConcept/GridConcept'
-import Demo from './components/UseCallback/Demo';
+import DragNotes from './components/DragNotes/DragNotes';
+import { notesData } from './components/note-db';
+import {SingleNote} from "./components/note-db"
 
 function App() {
 
+  const [notes , setNotes] = useState<SingleNote[]>(notesData)
 
   return (
     <>
 
-  < Demo/>
-      {/* <GridConcept/> */}
+  <DragNotes notes={notes} noteSetter={setNotes}/>
     </>
   )
 }

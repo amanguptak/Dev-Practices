@@ -9,7 +9,7 @@ const Search = ({OnChange}:SearchProps) => {
     console.log('search renderd')
   return (
     <div>
-
+        <h1>Use call back demo</h1>
         <input type="text"
         onChange= {(e)=>OnChange(e.target.value)}
         />
