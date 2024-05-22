@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { createRef, useEffect, useRef } from "react";
 import Note from "./Note";
 
-import {SingleNote} from "../note-db"
+import { SingleNote } from "../note-db";
 
 interface DragNotesProps {
   notes: SingleNote[];
@@ -9,24 +9,25 @@ interface DragNotesProps {
 }
 
 const DragNotes = ({ notes, noteSetter }: DragNotesProps) => {
-    useEffect(() => {
-   
-        const savedNotesString = localStorage.getItem("notes");
-        const savedNotes: SingleNote[] = savedNotesString ? JSON.parse(savedNotesString) : [];
-    
-        const updatedNotes = notes.map((note) => {
-          const savedNote = savedNotes.find((n) => n.id === note.id);
-          if (savedNote) {
-            return {...note, position: savedNote.position};
-          } else {
-            const position = getNewPositions();
-            return {...note, position};
-          }
-        });
-    
-        noteSetter(updatedNotes);
-        localStorage.setItem("notes", JSON.stringify(updatedNotes));
-      }, [notes.length]);
+  useEffect(() => {
+    const savedNotesString = localStorage.getItem("notes");
+    const savedNotes: SingleNote[] = savedNotesString
+      ? JSON.parse(savedNotesString)
+      : [];
+
+    const updatedNotes = notes.map((note) => {
+      const savedNote = savedNotes.find((n) => n.id === note.id);
+      if (savedNote) {
+        return { ...note, position: savedNote.position };
+      } else {
+        const position = getNewPositions();
+        return { ...note, position };
+      }
+    });
+
+    noteSetter(updatedNotes);
+    localStorage.setItem("notes", JSON.stringify(updatedNotes));
+  }, [notes.length]);
 
   const getNewPositions = () => {
     const maxX = window.innerWidth - 250;
@@ -37,14 +38,29 @@ const DragNotes = ({ notes, noteSetter }: DragNotesProps) => {
       y: Math.floor(Math.random() * maxY),
     };
   };
+
+  const noteRefs = useRef<{ [key: string]: React.RefObject<HTMLDivElement> }>({});
+  const handleDragging = (data, e) => {
+      
+  }
+
+  useEffect(() => {
+    console.log("noteRefs", noteRefs);
+  }, [notes]);
   return (
     <div>
       <h1 className="text-center font-bold text-4xl">Note Dragable</h1>
 
       <div>
-        {notes.map((data) => (
-          <Note note={data} key={data.id} />
-        ))}
+        {notes.map((data) => {
+          if (!noteRefs.current[data.id]) {
+            noteRefs.current[data.id] = createRef();
+          }
+          return <Note note={data} key={data.id} ref={noteRefs.current[data.id]} 
+          
+          onMouseDown={(e)=>handleDragging(data , e)}
+          />;
+        })}
       </div>
     </div>
   );
