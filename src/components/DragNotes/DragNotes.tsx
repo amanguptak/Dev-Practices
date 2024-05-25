@@ -91,7 +91,8 @@ const DragNotes = ({ notes, noteSetter }: DragNotesProps) => {
     console.log(inputValue)
   },[inputValue])
 
-  const handleSubmit =()=>{
+  const handleSubmit =(e?:React.MouseEvent<HTMLButtonElement>)=>{
+    e?.preventDefault()
     console.log('Button submit')
   }
 
