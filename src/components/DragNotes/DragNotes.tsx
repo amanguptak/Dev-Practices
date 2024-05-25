@@ -1,19 +1,22 @@
-import { createRef, useEffect, useRef } from "react";
+import { createRef, useEffect, useRef, useState } from "react";
 import Note from "./Note";
-
 import { SingleNote } from "../note-db";
+import Input from "./Input";
+import Button from "./Button";
 
 interface DragNotesProps {
   notes: SingleNote[];
-  noteSetter: (notesData: SingleNote[]) => void; // Assuming it updates the notes array
+  noteSetter: (notesData: SingleNote[]) => void;
 }
 
 const DragNotes = ({ notes, noteSetter }: DragNotesProps) => {
+
+  const [inputValue , setInputValue] = useState<string>("")
+  const noteRefs = useRef<{ [key: string]: React.RefObject<HTMLDivElement> }>({});
+
   useEffect(() => {
-    const savedNotesString = localStorage.getItem("notes");
-    const savedNotes: SingleNote[] = savedNotesString
-      ? JSON.parse(savedNotesString)
-      : [];
+    const savedNotesString = localStorage.getItem('notes');
+    const savedNotes: SingleNote[] = savedNotesString ? JSON.parse(savedNotesString) : [];
 
     const updatedNotes = notes.map((note) => {
       const savedNote = savedNotes.find((n) => n.id === note.id);
@@ -26,8 +29,8 @@ const DragNotes = ({ notes, noteSetter }: DragNotesProps) => {
     });
 
     noteSetter(updatedNotes);
-    localStorage.setItem("notes", JSON.stringify(updatedNotes));
-  }, [notes.length]);
+    localStorage.setItem('notes', JSON.stringify(updatedNotes));
+  }, [notes.length, noteSetter]);
 
   const getNewPositions = () => {
     const maxX = window.innerWidth - 250;
@@ -39,9 +42,6 @@ const DragNotes = ({ notes, noteSetter }: DragNotesProps) => {
     };
   };
 
-  const noteRefs = useRef<{ [key: string]: React.RefObject<HTMLDivElement> }>({});
-
-  
   const handleDragging = (data: SingleNote, e: React.MouseEvent<HTMLDivElement>) => {
     const noteRef = noteRefs.current[data.id]?.current;
     if (!noteRef) return;
@@ -59,16 +59,16 @@ const DragNotes = ({ notes, noteSetter }: DragNotesProps) => {
     };
 
     const handleMouseUp = () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
 
       const finalRect = noteRef.getBoundingClientRect();
       const newPosition = { x: finalRect.left, y: finalRect.top };
       updateNotePosition(data.id, newPosition);
     };
 
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
   };
 
   const updateNotePosition = (id: string, newPosition: { x: number; y: number }) => {
@@ -76,22 +76,48 @@ const DragNotes = ({ notes, noteSetter }: DragNotesProps) => {
       note.id === id ? { ...note, position: newPosition } : note
     );
     noteSetter(updatedNotes);
-    localStorage.setItem("notes", JSON.stringify(updatedNotes));
+    localStorage.setItem('notes', JSON.stringify(updatedNotes));
   };
 
   useEffect(() => {
-    console.log("noteRefs", noteRefs);
+    console.log('noteRefs', noteRefs);
   }, [notes]);
+
+  const handleInputChange =(value:string) => {
+   
+        setInputValue(value);
+  }
+  useEffect(()=>{
+    console.log(inputValue)
+  },[inputValue])
+
+  const handleSubmit =()=>{
+    console.log('Button submit')
+  }
+
   return (
     <div>
-      <h1 className="text-center font-bold text-4xl">Note Dragable</h1>
+      <h1 className="text-center font-bold text-4xl">Note Draggable</h1>
 
+    <form action="">
+
+    <Input onInputChange={handleInputChange}/>
+    <Button onButtonSubmit={handleSubmit}>submit</Button>
+    </form>
+  
       <div>
         {notes.map((data) => {
           if (!noteRefs.current[data.id]) {
             noteRefs.current[data.id] = createRef();
           }
-          return <Note note={data} key={data.id} ref={noteRefs.current[data.id]} onMouseDown={(e)=>handleDragging(data,e)}/>;
+          return (
+            <Note
+              note={data}
+              key={data.id}
+              ref={noteRefs.current[data.id]}
+              onMouseDown={(e) => handleDragging(data, e)}
+            />
+          );
         })}
       </div>
     </div>
