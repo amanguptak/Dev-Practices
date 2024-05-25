@@ -3,7 +3,8 @@ import { SingleNote } from "../note-db";
 
 interface INoteProps {
   note: SingleNote;
-  ref :HTMLDivElement
+
+  onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const Note = forwardRef<HTMLDivElement, INoteProps>(({ note }, ref) => {
