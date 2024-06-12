@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  react-app:
+    build: .
+    ports:
+      - "3000:5173" 
+      #  line mean first if for local host second inside the container        
+    volumes:
+      - ./src:/app/src
+  
+    

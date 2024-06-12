@@ -1,19 +1,25 @@
 
 
-import { useState } from 'react';
 import './App.css'
-import DragNotes from './components/DragNotes/DragNotes';
-import { notesData } from './components/note-db';
-import {SingleNote} from "./components/note-db"
 
+
+import { Outlet } from 'react-router-dom';
+import Navbar from './components/Navbar/Navbar';
 function App() {
 
-  const [notes , setNotes] = useState<SingleNote[]>(notesData)
+
 
   return (
     <>
+     <div className="min-h-screen flex flex-col m-3">
+      <Navbar />
+      <main className="flex-grow">
+        <Outlet />
+      </main>
+    
+    </div>
 
-  <DragNotes notes={notes} noteSetter={setNotes}/>
+
     </>
   )
 }

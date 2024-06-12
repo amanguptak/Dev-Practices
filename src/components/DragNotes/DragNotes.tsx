@@ -1,8 +1,6 @@
-import { createRef, useEffect, useRef, useState } from "react";
+import { createRef, useEffect, useRef } from "react";
 import Note from "./Note";
 import { SingleNote } from "../note-db";
-import Input from "./Input";
-import Button from "./Button";
 
 interface DragNotesProps {
   notes: SingleNote[];
@@ -11,7 +9,7 @@ interface DragNotesProps {
 
 const DragNotes = ({ notes, noteSetter }: DragNotesProps) => {
 
-  const [inputValue , setInputValue] = useState<string>("")
+
   const noteRefs = useRef<{ [key: string]: React.RefObject<HTMLDivElement> }>({});
 
   useEffect(() => {
@@ -83,28 +81,13 @@ const DragNotes = ({ notes, noteSetter }: DragNotesProps) => {
     console.log('noteRefs', noteRefs);
   }, [notes]);
 
-  const handleInputChange =(value:string) => {
-   
-        setInputValue(value);
-  }
-  useEffect(()=>{
-    console.log(inputValue)
-  },[inputValue])
-
-  const handleSubmit =(e?:React.MouseEvent<HTMLButtonElement>)=>{
-    e?.preventDefault()
-    console.log('Button submit')
-  }
+ 
 
   return (
     <div>
-      <h1 className="text-center font-bold text-4xl">Note Draggable</h1>
+      {/* <h1 className="text-center font-bold text-4xl">Note Draggable</h1> */}
 
-    <form action="">
-
-    <Input onInputChange={handleInputChange}/>
-    <Button onButtonSubmit={handleSubmit}>submit</Button>
-    </form>
+   
   
       <div>
         {notes.map((data) => {
