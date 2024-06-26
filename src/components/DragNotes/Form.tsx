@@ -5,29 +5,37 @@ import { useState } from "react";
 import TextArea from './TextArea';
 import { SingleNote } from "../note-db";
 import { notesData } from "../note-db";
+import { useNavigate } from "react-router-dom";
 
 const initialValue ={
-  id: Date.now().toString(),
+  id: "",
   title:"",
   content: "",
 }
 
 const Form = () => {
 
+  const navigate = useNavigate()
+  
   const [notes , setNotes] = useState<SingleNote[]>(notesData)
   const [inputValue, setInputValue] = useState<SingleNote>(initialValue);
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> ) => {
     const {name , value } = e.target
-    setInputValue({...inputValue ,[name] : value})
+    setInputValue({...inputValue ,[name] : value} )
   };
 
 
   const handleSubmit = (e?: React.MouseEvent<HTMLButtonElement>) => {
     e?.preventDefault();
-    const newNotes = [...notes, inputValue];
+    const noteWithId = { ...inputValue, id: (notes.length + 1).toString() };
+    const newNotes = [...notes, noteWithId];
+
+    localStorage.setItem('notes', JSON.stringify(newNotes));
+
     setNotes(newNotes);
-    notesData.push(inputValue); // Update the external array
+    notesData.push(noteWithId); // Update the external array
     setInputValue(initialValue);
+    navigate("/");
     console.log("Updated Notes:", notesData);
   };
   return (
